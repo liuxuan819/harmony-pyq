@@ -12,7 +12,7 @@ class TweetsListViewModel {
       } else {
         const url = 'https://xianmobilelab.gitlab.io/moments-data/tweets.json';
         httpRequestGet(url)
-          .then((tweetsList: TweetsItem[]) => this.tweetsList = tweetsList)
+          .then((tweetsList: TweetsItem[]) => this.tweetsList = tweetsList.filter(tweets => tweets.content || tweets.images?.length))
           .catch(() => prompt.showToast({ message: '获取朋友圈推文失败' }))
           .finally(() => resolve(this.sliceTweets(page, pageSize)))
       }
@@ -20,8 +20,7 @@ class TweetsListViewModel {
   }
 
   private sliceTweets(page: number = 1, pageSize: number = 5): TweetsItem[] {
-    return this.tweetsList.slice(0, Math.min(this.tweetsList.length, page * pageSize))
-      .filter(tweets => tweets.content || tweets.images?.length);
+    return this.tweetsList.slice(0, Math.min(this.tweetsList.length, page * pageSize));
   }
 }
 
